@@ -1,21 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title></title>
+  <title>GeoCollect</title>
 
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' />
+
+  <link href='css/style.css' rel='stylesheet' />
 </head>
 <body>
 
-<div id='map' style='width: 400px; height: 300px;'></div>
-<script>
-mapboxgl.accessToken = '<your access token here>';
-var map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v9'
-});
-</script>
+<div id='map'></div>
+<script src='js/index.js'></script>
 
 </body>
 </html>
