@@ -4,6 +4,14 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/streets-v9'
 });
 
+// Item System
+$('#ground-view nav').on('click', function () {
+  $('#ground-view').toggleClass('off');
+});
+console.log($('#ground-view').toggle);
+
+// Debug System
+
 var DebugModel = Backbone.Model.extend({
   defaults: {
     'latitude': 0,

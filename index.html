@@ -17,7 +17,11 @@
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css' rel='stylesheet' />
 
-  <link href='css/style.css' rel='stylesheet' />
+  <link href="css/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <link href="css/print.css" media="print" rel="stylesheet" type="text/css" />
+  <!--[if IE]>
+    <link href="css/ie.css" media="screen, projection" rel="stylesheet" type="text/css" />
+  <![endif]-->
 </head>
 <body>
 
@@ -27,6 +31,12 @@
   <div>Acc: <span id='debug-accuracy'></span></div>
   <div>Frs: <span id='debug-freshness'></span></div>
 </div>
+<div id="ground-view" class="sidebar sidebar-left off">
+  <nav>&gt;</nav>
+  <ul></ul>
+</div>
+<div id="inventory-view" class="sidebar"></div>
+
 <div id='map'></div>
 <script src='js/index.js'></script>
 
