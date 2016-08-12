@@ -55,7 +55,7 @@ function positionUpdate (position) {
   marker.setLngLat([position.coords.longitude, position.coords.latitude])
   map.flyTo({
     center: [position.coords.longitude, position.coords.latitude], 
-    zoom: 15
+    zoom: 19
   });
 }
 
