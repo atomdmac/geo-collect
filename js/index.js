@@ -1,4 +1,24 @@
-mapboxgl.accessToken = MAPBOX_TOKEN;
+requirejs.config({
+  baseUrl: 'js',
+  paths: {
+    jquery: 'lib/zepto-min',
+    // zepto: 'lib/zepto-min',
+    underscore: 'lib/underscore-min',
+    backbone: 'lib/backbone-min',
+    mapboxgl: 'https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl'
+  }
+});
+
+requirejs([
+  '../token',
+  'jquery',
+  'underscore',
+  'backbone',
+  'mapboxgl'],
+function (token, $, _, Backbone, mapboxgl) {
+
+
+mapboxgl.accessToken = token.MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
   container: 'map-view',
   style: 'mapbox://styles/mapbox/streets-v9'
@@ -188,3 +208,5 @@ function scatterItems (centerLng, centerLat, spread) {
     items.push(itemModel);
   }
 }
+
+});
