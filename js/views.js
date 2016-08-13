@@ -1,8 +1,9 @@
 define([
   'jquery',
   'underscore',
-  'backbone'],
-function ($, _, Backbone) {
+  'backbone',
+  'mapboxgl'],
+function ($, _, Backbone, mapboxgl) {
 
   // Generic Sidebar view
   var SideBarView = Backbone.View.extend({
@@ -39,11 +40,37 @@ function ($, _, Backbone) {
     template: _.template($('#item-list-inventory-view').html())
   });
 
+  var ItemMarkerView = Backbone.View.extend({
+    initialize: function (map, itemModel) {
+      this.map = map;
+      this.itemModel = itemModel;
+      this.marker = new mapboxgl.Marker(this.el);
+      this.marker.setLngLat([
+        this.itemModel.get('longitude'),
+        this.itemModel.get('latitude')
+      ]);
+
+      this.listenTo(itemModel, 'move', this.move);
+      this.listenTo(itemModel, 'pick-up', this.remove);
+      this.render();
+    },
+    move: function () {
+      this.marker.setLngLat([
+        this.itemModel.get('longitude'), 
+        this.itemModel.get('latitude')
+      ]);
+    },
+    render: function () {
+      this.marker.addTo(this.map);
+    }
+  });
+
   // Return objects offered by this module.
   return {
     SideBarView: SideBarView,
     GroundView: GroundView,
-    InventoryView: InventoryView
+    InventoryView: InventoryView,
+    ItemMarkerView: ItemMarkerView
   };
 
 });

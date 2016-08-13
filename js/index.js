@@ -1,3 +1,5 @@
+var ranAlready = false;
+
 requirejs.config({
   baseUrl: 'js',
   paths: {
@@ -16,9 +18,16 @@ requirejs([
   'backbone',
   'mapboxgl',
   'models',
-  'views'],
-function (token, $, _, Backbone, mapboxgl, Models, Views) {
+  'views',
+  'server-dummy'],
+function (token, $, _, Backbone, mapboxgl, Models, Views, Server) {
 
+// TODO: Fix bug where MapBoxGL appears to cause require.js to call this module function twice?
+if(ranAlready) {
+  return;
+} else{
+  ranAlready = true;
+} 
 
 mapboxgl.accessToken = token.MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
@@ -30,6 +39,20 @@ var map = new mapboxgl.Map({
 // Item System
 var groundCollectionInstance = new Models.ItemCollection();
 var groundViewInstance = new Views.GroundView(groundCollectionInstance);
+
+// Called when client first recieves list of items in the area.
+Server.on('server send items', function (data) {
+  data.forEach(function (itemModel, index) {
+    var itemMarker = new Views.ItemMarkerView(map, itemModel)
+  });
+});
+
+Server.on('server update', function (data) {
+  groundCollectionInstance.reset();
+  data.forEach(function (itemModel, index) {
+    groundCollectionInstance.add(itemModel);
+  });
+});
 
 var inventoryModelInstance = new Models.ItemCollection(); 
 var inventoryViewInstance = new Views.InventoryView(inventoryModelInstance);
@@ -68,31 +91,6 @@ var DebugView = Backbone.View.extend({
 
 var debugViewInstance = new DebugView;
 
-var ItemMarker = Backbone.View.extend({
-  initialize: function (map, itemModel) {
-    this.map = map;
-    this.itemModel = itemModel;
-    this.marker = new mapboxgl.Marker(this.el);
-    this.marker.setLngLat([
-      this.itemModel.get('longitude'),
-      this.itemModel.get('latitude')
-    ]);
-
-    this.listenTo(itemModel, 'move', this.move);
-    this.listenTo(itemModel, 'pick-up', this.remove);
-    this.render();
-  },
-  move: function () {
-    this.marker.setLngLat([
-      this.itemModel.get('longitude'), 
-      this.itemModel.get('latitude')
-    ]);
-  },
-  render: function () {
-    this.marker.addTo(this.map);
-  }
-})
-
 // Create a marker to represent the user.
 var marker = new mapboxgl.Marker($('<div id="player-marker"></div>')[0])
   .setLngLat([0, 0])
@@ -107,7 +105,7 @@ var navOptions = {
 var watchId = navigator.geolocation.watchPosition(positionUpdate, positionError, navOptions);
 
 // !!! DEBUG !!!
-var scattered = false;
+var updateCount = 0;
 
 function positionUpdate (position) {
 
@@ -115,9 +113,14 @@ function positionUpdate (position) {
   updateDebug(position);
 
   // !!! DEBUG !!!
-  if(!scattered /*&& position.coords.accuracy < 20*/) {
-    scattered = true;
-    scatterItems(position.coords.longitude, position.coords.latitude, 0.0001);
+  if(!updateCount /*&& position.coords.accuracy < 20*/) {
+    updateCount++;
+
+    Server.emit('client init', {
+      centerLng: position.coords.longitude,
+      centerLat: position.coords.latitude,
+      spread   : 0.0001
+    });
   }
 
   marker.setLngLat([position.coords.longitude, position.coords.latitude])
@@ -126,16 +129,11 @@ function positionUpdate (position) {
     zoom: 19
   });
 
-  // Update nearby items.
-  // TODO: Clean up code for filtering nearby items so server can be a drop-in replacement.
-  groundViewInstance.collection.reset();
-  items.forEach(function (item, index) {
-    var userPos = marker.getLngLat(),
-        lngDiff = item.get('longitude') - userPos.lng,
-        latDiff = item.get('latitude')  - userPos.lat,
-        diff    = Math.abs(Math.sqrt(lngDiff * lngDiff + latDiff * latDiff));
-    if(diff < 0.00005) groundViewInstance.collection.add(item);
-  })
+  // Alert the server of my updated position.
+  Server.emit('client update', {
+    latitude : position.coords.latitude, 
+    longitude: position.coords.longitude
+  });
 }
 
 function positionError (error) {
