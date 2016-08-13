@@ -1,5 +1,3 @@
-var ranAlready = false;
-
 var token    = require('../token');
 var $        = require('zepto-browserify').$;
 var _        = require('underscore');
@@ -9,13 +7,6 @@ var mapboxgl = require('mapbox-gl');
 var Models   = require('./models');
 var Views    = require('./views');
 var Server   = require('./server-dummy');
-
-// TODO: Fix bug where MapBoxGL appears to cause require.js to call this module function twice?
-if(ranAlready) {
-  return;
-} else{
-  ranAlready = true;
-}
 
 mapboxgl.accessToken = token.MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
