@@ -1,33 +1,21 @@
 var ranAlready = false;
 
-requirejs.config({
-  baseUrl: 'js',
-  paths: {
-    jquery: 'lib/zepto-min',
-    // zepto: 'lib/zepto-min',
-    underscore: 'lib/underscore-min',
-    backbone: 'lib/backbone-min',
-    mapboxgl: 'https://api.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl'
-  }
-});
-
-requirejs([
-  '../token',
-  'jquery',
-  'underscore',
-  'backbone',
-  'mapboxgl',
-  'models',
-  'views',
-  'server-dummy'],
-function (token, $, _, Backbone, mapboxgl, Models, Views, Server) {
+var token    = require('../token');
+var $        = require('zepto-browserify').$;
+var _        = require('underscore');
+var Backbone = require('backbone');
+Backbone.$ = $;
+var mapboxgl = require('mapbox-gl');
+var Models   = require('./models');
+var Views    = require('./views');
+var Server   = require('./server-dummy');
 
 // TODO: Fix bug where MapBoxGL appears to cause require.js to call this module function twice?
 if(ranAlready) {
   return;
 } else{
   ranAlready = true;
-} 
+}
 
 mapboxgl.accessToken = token.MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
@@ -163,5 +151,3 @@ function scatterItems (centerLng, centerLat, spread) {
     items.push(itemModel);
   }
 }
-
-});

@@ -23,4 +23,16 @@ define({
     MAPBOX_TOKEN: 'REPLACE-THIS-TEXT-WITH-YOUR-ACCESS-TOKEN'
 });```
 3. Save the file.
-4. Aaaand you're done!
+
+## Building the Project
+You're so close!  The only thing left to do is to compile all of the code so you can use it.  For this, you're going to need to install Browserify:
+
+```npm install -g browserify```
+
+I would also suggest installing Watchify, which will watch for changes in your code and automatically build the project for you when they occur:
+
+```npm install -g watchify```
+
+Finally, build the thing!  Use `build-browserify.bat` for plain ol' Browserify or `build-watchify` for the fancy, new-hotness Watchify option.
+
+Aaaand you're done!
