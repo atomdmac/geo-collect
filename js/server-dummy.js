@@ -2,12 +2,14 @@ define([
 'models'
 ], function (Models) {
   var Server = {};
+
+  // Server
   
   Server.callbacks = {
-    'client init'      : [],
-    'client update'    : [],
-    'server send items': [],
-    'server update'    : []
+    'client init'               : [],
+    'client update'             : [],
+    'server update nearby items': [],
+    'server update zone items'  : []
   };
 
   Server.on = function (event, callback) {
@@ -31,12 +33,12 @@ define([
     // When client connects, scatter items around them.
     Server.on('client init', function (data) {
       Server.items = scatterItems(data.centerLng, data.centerLat, data.spread);
-      Server.emit('server send items', Server.items);
+      Server.emit('server update zone items', Server.items);
     });
 
     // When client position updates, figure out which items are close to them.
     Server.on('client update', function (data) {
-      var closeItems = Server.items.filter(function (item, index) {
+      var nearbyItems = Server.items.filter(function (item, index) {
         var lngDiff = item.get('longitude') - data.longitude,
             latDiff = item.get('latitude')  - data.latitude,
             diff    = Math.abs(Math.sqrt(lngDiff * lngDiff + latDiff * latDiff));
@@ -44,7 +46,7 @@ define([
       });
 
       // Alert the client that there are some items close to them (or not).
-      Server.emit('server update', closeItems);
+      Server.emit('server update nearby items', nearbyItems);
     })
   }
 

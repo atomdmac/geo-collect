@@ -41,13 +41,13 @@ var groundCollectionInstance = new Models.ItemCollection();
 var groundViewInstance = new Views.GroundView(groundCollectionInstance);
 
 // Called when client first recieves list of items in the area.
-Server.on('server send items', function (data) {
+Server.on('server update zone items', function (data) {
   data.forEach(function (itemModel, index) {
     var itemMarker = new Views.ItemMarkerView(map, itemModel)
   });
 });
 
-Server.on('server update', function (data) {
+Server.on('server update nearby items', function (data) {
   groundCollectionInstance.reset();
   data.forEach(function (itemModel, index) {
     groundCollectionInstance.add(itemModel);
