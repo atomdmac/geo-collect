@@ -4,11 +4,11 @@ Collect all of the Stuff in your area to win!
 ## Installation
 Clone this repo to somewhere on your computer.  You know how to use Git, right?
 
-## Install Dependencies
+### Install Dependencies
 I use node/npm to manage dependencies for this project. Once you have them both installed, you can just run the following command from the project directory:
 `npm install`
 
-## Add Your MapBoxGL Token
+### Add Your MapBoxGL Token
 Sorry, you can't use mine :P.  Luckily, developer keys are extremely easy to obtain:
 
 1. Go to [MapBox's sign-up page](https://www.mapbox.com/studio/signup/) and get yourself a free account.
@@ -24,7 +24,7 @@ define({
 });```
 3. Save the file.
 
-## Building the Project
+### Building the Project
 You're so close!  The only thing left to do is to compile all of the code so you can use it.  For this, you're going to need to install Browserify:
 
 ```npm install -g browserify```
