@@ -31,10 +31,7 @@ var SideBarView = Backbone.View.extend({
     var self = this;
     this.ul.empty();
     this.collection.forEach(function (item, index) {
-      var li = $('<li>').text(item.get('label'));
-      var btn = $('<button>').text('Pick Up');
-
-      li.append(btn);
+      var li = self.template(item.toJSON());
       self.ul.append(li);
     });
   },
@@ -44,7 +41,8 @@ var SideBarView = Backbone.View.extend({
 });
 
 var GroundView = SideBarView.extend({
-  el: '#ground-view'
+  el: '#ground-view',
+  template: _.template($('#item-list-ground-view').html())
 });
 
 var groundViewInstance = new GroundView;
@@ -53,7 +51,8 @@ var groundViewInstance = new GroundView;
 // Inventory
 // ---
 var InventoryView = SideBarView.extend({
-  el: '#inventory-view'
+  el: '#inventory-view',
+  template: _.template($('#item-list-inventory-view').html())
 });
 
 var inventoryViewInstance = new InventoryView;

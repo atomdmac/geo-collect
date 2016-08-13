@@ -25,6 +25,15 @@
 </head>
 <body>
 
+<!-- HTML Templates -->
+<script type="text/html" id="item-list-ground-view">
+  <li><%= label %><button>Pick Up</button></li>
+</script>
+<script type="text/html" id="item-list-inventory-view">
+  <li><%= label %><button>Drop</button></li>
+</script>
+
+<!-- UI Layout -->
 <div id='debug-view'>
   <div>Lat: <span id='debug-latitude'></span></div>
   <div>Lng: <span id='debug-longitude'></span></div>
