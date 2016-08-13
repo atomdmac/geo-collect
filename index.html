@@ -31,13 +31,18 @@
   <div>Acc: <span id='debug-accuracy'></span></div>
   <div>Frs: <span id='debug-freshness'></span></div>
 </div>
-<div id="ground-view" class="sidebar sidebar-left off">
+<section id="ground-view" class="sidebar sidebar-left off">
+  <header><h1>Nearby Items:</h1></header>
   <nav>&gt;</nav>
   <ul></ul>
-</div>
-<div id="inventory-view" class="sidebar"></div>
+</section>
+<section id="inventory-view" class="sidebar sidebar-right off">
+  <header><h1>Held Items:</h1></header>
+  <nav>&lt;</nav>
+  <ul></ul>
+</section>
 
-<div id='map'></div>
+<div id='map-view'></div>
 <script src='js/index.js'></script>
 
 </body>
