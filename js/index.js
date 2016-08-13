@@ -14,8 +14,10 @@ requirejs([
   'jquery',
   'underscore',
   'backbone',
-  'mapboxgl'],
-function (token, $, _, Backbone, mapboxgl) {
+  'mapboxgl',
+  'models',
+  'views'],
+function (token, $, _, Backbone, mapboxgl, Models, Views) {
 
 
 mapboxgl.accessToken = token.MAPBOX_TOKEN;
@@ -24,58 +26,13 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/streets-v9'
 });
 
+// ---
 // Item System
-var ItemModel = Backbone.Model.extend({
-  defaults: {
-    owner: null,
-    label: 'A Thing',
-    latitude: 0,
-    longitude: 0
-  }
-});
+var groundCollectionInstance = new Models.ItemCollection();
+var groundViewInstance = new Views.GroundView(groundCollectionInstance);
 
-var ItemCollection = Backbone.Collection.extend({
-  model: ItemModel
-});
-
-var SideBarView = Backbone.View.extend({
-  events: {
-    'click nav': 'toggleOpen'
-  },
-  initialize: function () {
-    this.ul = $('ul', this.el);
-    this.collection = new ItemCollection;
-    this.listenTo(this.collection, 'update', this.render);
-  },
-  render: function () {
-    var self = this;
-    this.ul.empty();
-    this.collection.forEach(function (item, index) {
-      var li = self.template(item.toJSON());
-      self.ul.append(li);
-    });
-  },
-  toggleOpen: function () {
-    this.$el.toggleClass('off');
-  }
-});
-
-var GroundView = SideBarView.extend({
-  el: '#ground-view',
-  template: _.template($('#item-list-ground-view').html())
-});
-
-var groundViewInstance = new GroundView;
-
-// ---
-// Inventory
-// ---
-var InventoryView = SideBarView.extend({
-  el: '#inventory-view',
-  template: _.template($('#item-list-inventory-view').html())
-});
-
-var inventoryViewInstance = new InventoryView;
+var inventoryModelInstance = new Models.ItemCollection(); 
+var inventoryViewInstance = new Views.InventoryView(inventoryModelInstance);
 
 // Add debug items
 inventoryViewInstance.collection.add({label: 'Another Thing!'});
@@ -199,7 +156,7 @@ function scatterItems (centerLng, centerLat, spread) {
   for(var i=0; i<totalItems; i++) {
     latitude = centerLat + (Math.random() * spread) * (Math.random() < 0.5 ? 1 : -1);
     longitude = centerLng + (Math.random() * spread) * (Math.random() < 0.5 ? 1 : -1);
-    itemModel = new ItemModel({
+    itemModel = new Models.ItemModel({
       label: 'Item ' + i,
       latitude: latitude,
       longitude: longitude
