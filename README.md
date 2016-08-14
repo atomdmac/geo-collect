@@ -19,9 +19,9 @@ Now all that's left to do is insert your token into the app.  To do that:
 
 1. Make a new file called `token.js` and place it in the project root.
 2. Paste the following text into it:```
-define({
+module.export = {
     MAPBOX_TOKEN: 'REPLACE-THIS-TEXT-WITH-YOUR-ACCESS-TOKEN'
-});```
+};```
 3. Save the file.
 
 ### Building the Project
