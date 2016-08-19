@@ -8,6 +8,14 @@ Clone this repo to somewhere on your computer.  You know how to use Git, right?
 I use node/npm to manage dependencies for this project. Once you have them both installed, you can just run the following command from the project directory:
 `npm install`
 
+Next you'll want to install Browserify so you can build the project:
+
+```npm install -g browserify```
+
+Though it's completely optional, I would also suggest installing Watchify if you're going to be doing any development.  It's a neat companion to Browserify that will watch for changes in your code and automatically build the project for you when they occur:
+
+```npm install -g watchify```
+
 ### Add Your MapBoxGL Token
 Sorry, you can't use mine :P.  Luckily, developer keys are extremely easy to obtain:
 
@@ -25,13 +33,6 @@ module.export = {
 3. Save the file.
 
 ### Building the Project
-You're so close!  The only thing left to do is to compile all of the code so you can use it.  For this, you're going to need to install Browserify:
-
-```npm install -g browserify```
-
-I would also suggest installing Watchify, which will watch for changes in your code and automatically build the project for you when they occur:
-
-```npm install -g watchify```
 
 Finally, build the thing!  Use `build-browserify.bat` for plain ol' Browserify or `build-watchify` for the fancy, new-hotness Watchify option.
 
