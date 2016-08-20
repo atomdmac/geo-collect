@@ -354,5 +354,5 @@ li {
 
 /* line 75, ../sass/screen.scss */
 #player-marker {
-  background: blue;
+  background: url(../img/player.png) !important;
 }
