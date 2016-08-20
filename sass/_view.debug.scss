@@ -1,0 +1,39 @@
+#debug-view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $padding;
+  background: $white;
+  z-index: 1;
+  min-width: 200px;
+  max-height: 200px;
+  transition: max-height $anim-duration, padding-top $anim-duration, padding-bottom $anim-duration;
+  overflow: hidden;
+
+  &.hidden {
+    padding-top: 0;
+    padding-bottom: 0;
+    max-height: 0;
+  }
+
+  li {
+    border-bottom: 1px solid $black;
+    
+    &:last-child {
+      border: 0;
+    }
+    
+    span {
+      padding: 2px 4px;
+    }
+  }
+
+  .debug-label {
+    display: inline-block;
+    min-width: 50px;
+    font-weight: bold;
+    text-align: right;
+    border-right: 1px solid $black;
+  }
+}

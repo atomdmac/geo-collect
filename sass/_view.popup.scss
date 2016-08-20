@@ -1,0 +1,34 @@
+.popup {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.75);
+  z-index: 9999;
+  transition: opacity $anim-duration, visibility $anim-duration;
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  .popup-content {
+    max-width: 400px;
+    margin: $margin;
+    margin-top: 20%;
+    padding: $padding;
+    background-color: $white;
+    transition: opacity $anim-duration, margin $anim-duration;
+    
+    &.hidden {
+      margin-top: 10%;
+      opacity: 0;
+    }
+  }
+}

@@ -26,12 +26,24 @@
 </script>
 
 <!-- UI Layout -->
-<div id='debug-view'>
-  <div>Lat: <span id='debug-latitude'></span></div>
-  <div>Lng: <span id='debug-longitude'></span></div>
-  <div>Acc: <span id='debug-accuracy'></span></div>
-  <div>Frs: <span id='debug-freshness'></span></div>
+<div id="loading-view" class="popup">
+  <section class="popup-content">
+    <h1>You gather your bearings</h1>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </section>
 </div>
+<section id='debug-view' class='hidden'>
+  <ul>
+    <li><span class='debug-label'>Lat</span><span id='debug-latitude'></span></li>
+    <li><span class='debug-label'>Lng</span><span id='debug-longitude'></span></li>
+    <li><span class='debug-label'>Acc</span><span id='debug-accuracy'></span></li>
+    <li><span class='debug-label'>Frs</span><span id='debug-freshness'></span></li>
+  </ul>
+</section>
 <section id="ground-view" class="sidebar sidebar-left off">
   <header><h1>Nearby Items:</h1></header>
   <nav>&gt;</nav>
@@ -43,7 +55,7 @@
   <ul></ul>
 </section>
 
-<div id='map-view'></div>
+<div id='map-view' class='hidden'></div>
 <script src="js/bundle.js"></script>
 
 </body>

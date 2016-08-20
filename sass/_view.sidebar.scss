@@ -1,0 +1,84 @@
+.sidebar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: $sidebar-width-large;
+  background: $white;
+  transition: left 500ms, right 500ms;
+
+  @media screen and (max-width: 600px) {
+    width: $sidebar-width-small;
+  }
+
+  header {
+    margin: $margin;
+  }
+
+  nav {
+    position: absolute;
+    top: 15px;
+    padding: $padding;
+    border: 1px solid $black;
+    background: $white;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  ul {
+    padding: 20px $padding $padding;
+  }
+
+  li {
+    padding: $padding;
+    background: #ddd;
+    margin: -$padding;
+    margin-top: 0;
+    margin-bottom: 1px;
+    overflow: hidden;
+
+    button {
+      float: right;
+      display: inline-block;
+      margin: -$padding;
+      height: 46px;
+    }
+  }
+}
+
+.sidebar-left {
+  left: 0;
+  border-right: 1px solid $black;
+
+  &.off {
+    left: -$sidebar-width-large;
+
+    @media screen and (max-width: 600px) {
+      left: -$sidebar-width-small;
+    }
+  }
+
+  nav {
+    left: 100%;
+    border-left: 0;
+  }
+}
+
+.sidebar-right {
+  right: 0;
+  border-left: 1px solid $black;
+
+  &.off {
+    right: -$sidebar-width-large;
+
+    @media screen and (max-width: 600px) {
+      right: -$sidebar-width-small;
+    }
+  }
+
+  nav {
+    right: 100%;
+    border-right: 0;
+  }
+}

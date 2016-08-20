@@ -109,8 +109,14 @@ function positionUpdate (position) {
     });
   }
 
+  $('#loading-view').addClass('hidden');
+  $('#map-view').removeClass('hidden');
+  setTimeout(function () {
+    $('#debug-view').removeClass('hidden');
+  }, 500);
+
   marker.setLngLat([position.coords.longitude, position.coords.latitude])
-  map.flyTo({
+  map.jumpTo({
     center: [position.coords.longitude, position.coords.latitude], 
     zoom: 19
   });
