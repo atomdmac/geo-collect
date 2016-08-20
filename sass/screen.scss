@@ -3,24 +3,6 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
-@import "compass/reset";
-
-html, body {
-  margin: 0;
-  padding: 0;
-}
-body {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-}
-
-h1 {
-  font-size: 2em;
-}
 
 // ---
 // General Settings
@@ -33,6 +15,39 @@ $padding: 15px;
 // ---
 $sidebarWidthSmall: 200px;
 $sidebarWidthLarge: 400px;
+
+// ---
+// Animation
+// ---
+$animDuration: 0.5s;
+
+@import "compass/reset";
+@import "_screen.mobile";
+@import "_spinner";
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+body {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  font-family: 'Helvetica', 'Sans-Serif';
+  line-height: 1;
+}
+
+h1 {
+  font-size: 2em;
+  margin: $margin 0;
+}
+
+p {
+  margin: $margin 0;
+}
 
 .sidebar {
   position: absolute;
@@ -130,25 +145,64 @@ $sidebarWidthLarge: 400px;
 #map-view {
   width: 100%;
   height: 100%;
+  transition: opacity $animDuration;
+
+  &.hidden {
+    opacity: 0;
+  }
 }
 
 #debug-view {
   position: absolute;
-  top: 0;
-  left: 50%;
+  width: 100%;
+  bottom: 0;
+  padding: $padding;
   background: #fff;
   z-index: 1;
   min-width: 200px;
 }
 
 .mapboxgl-marker {
-  min-width: 10px;
-  min-height: 10px;
-  border-radius: 10px;
-  border: 1px solid #fff;
-  background: pink;
+  min-width: 16px;
+  min-height: 16px;
+  background: url(../img/treasure-chest.png);
 }
 
 #player-marker {
   background: blue;
+}
+
+.popup {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.75);
+  z-index: 9999;
+  transition: opacity $animDuration, visibility $animDuration;
+
+  &.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  .popup-content {
+    max-width: 400px;
+    margin: $margin;
+    margin-top: 20%;
+    padding: 15px;
+    background-color: #fff;
+    transition: opacity $animDuration, margin $animDuration;
+  }
+
+  .popup-content.hidden {
+    margin-top:10%;
+    opacity: 0;
+  }
 }

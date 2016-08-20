@@ -26,6 +26,16 @@
 </script>
 
 <!-- UI Layout -->
+<div id="loading-view" class="popup">
+  <section class="popup-content">
+    <h1>You gather your bearings</h1>
+    <div class="spinner">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+  </section>
+</div>
 <div id='debug-view'>
   <div>Lat: <span id='debug-latitude'></span></div>
   <div>Lng: <span id='debug-longitude'></span></div>
@@ -43,7 +53,7 @@
   <ul></ul>
 </section>
 
-<div id='map-view'></div>
+<div id='map-view' class='hidden'></div>
 <script src="js/bundle.js"></script>
 
 </body>
