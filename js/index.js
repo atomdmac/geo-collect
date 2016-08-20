@@ -14,6 +14,13 @@ var map = new mapboxgl.Map({
   style: 'mapbox://styles/mapbox/streets-v9'
 });
 
+// Disable map panning/zooming.
+map.dragPan.disable();
+map.touchZoomRotate.disable();
+map.doubleClickZoom.disable();
+map.scrollZoom.disable();
+map.keyboard.disable();
+
 // ---
 // Item System
 var groundCollectionInstance = new Models.ItemCollection();
