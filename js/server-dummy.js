@@ -51,7 +51,7 @@ function initialize () {
 
 function scatterItems (centerLng, centerLat, spread) {
   var items = [],
-      totalItems = 10,
+      totalItems = 5,
       itemModel, itemView, latitude, longitude;
   for(var i=0; i<totalItems; i++) {
     latitude = centerLat + (Math.random() * spread) * (Math.random() < 0.5 ? 1 : -1);

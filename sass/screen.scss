@@ -25,6 +25,17 @@ $animDuration: 0.5s;
 @import "_screen.mobile";
 @import "_spinner";
 
+// ---
+// Views
+// ---
+@import "_view.debug";
+@import "_view.map";
+@import "_view.sidebar";
+@import "_view.popup";
+
+// ---
+// General Styles
+// ---
 html, body {
   margin: 0;
   padding: 0;
@@ -53,91 +64,6 @@ li {
   line-height: 1.5;
 }
 
-.sidebar {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: $sidebarWidthLarge;
-  background: #fff;
-  transition: left 500ms, right 500ms;
-
-  @media screen and (max-width: 600px) {
-    width: $sidebarWidthSmall;
-  }
-
-  header {
-    margin: $margin;
-  }
-
-  nav {
-    position: absolute;
-    top: 15px;
-    padding: $padding;
-    border: 1px solid #000;
-    background: #fff;
-    cursor: pointer;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  ul {
-    padding: 20px $padding $padding $padding;
-  }
-
-  li {
-    padding: $padding;
-    background: #ddd;
-    margin: -$padding;
-    margin-top: 0;
-    margin-bottom: 1px;
-    overflow: hidden;
-
-    button {
-      float: right;
-      display: inline-block;
-      margin: -$padding;
-      height: 46px;
-    }
-  }
-}
-
-.sidebar-left {
-  left: 0;
-  border-right: 1px solid #000;
-
-  &.off {
-    left: -$sidebarWidthLarge;
-
-    @media screen and (max-width: 600px) {
-      left: -$sidebarWidthSmall;
-    }
-  }
-
-  nav {
-    left: 100%;
-    border-left: 0;
-  }
-}
-
-.sidebar-right {
-  right: 0;
-  border-left: 1px solid #000;
-
-  &.off {
-    right: -$sidebarWidthLarge;
-
-    @media screen and (max-width: 600px) {
-      right: -$sidebarWidthSmall;
-    }
-  }
-
-  nav {
-    right: 100%;
-    border-right: 0;
-  }
-}
-
 #ground-view {
   z-index: 2;
 }
@@ -146,96 +72,6 @@ li {
   z-index: 2;
 }
 
-#map-view {
-  width: 100%;
-  height: 100%;
-  transition: opacity $animDuration;
-
-  &.hidden {
-    opacity: 0;
-  }
-}
-
-#debug-view {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  padding: $padding;
-  background: #fff;
-  z-index: 1;
-  min-width: 200px;
-  max-height: 200px;
-  transition: max-height $animDuration, padding-top $animDuration, padding-bottom $animDuration;
-  overflow: hidden;
-
-  &.hidden {
-    padding-top: 0;
-    padding-bottom: 0;
-    max-height: 0;
-  }
-
-  li{
-    border-bottom: 1px solid #000;
-  }
-
-  li:last-child {
-    border: 0;
-  }
-
-  li span {
-    padding: 2px 4px;
-  }
-
-  .debug-label {
-    display: inline-block;
-    min-width: 50px;
-    font-weight: bold;
-    text-align: right;
-    border-right: 1px solid #000;
-  }
-}
-
-.mapboxgl-marker {
-  min-width: 16px;
-  min-height: 16px;
-  background: url(../img/treasure-chest.png);
-}
-
 #player-marker {
   background: blue;
-}
-
-.popup {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0,0,0,0.75);
-  z-index: 9999;
-  transition: opacity $animDuration, visibility $animDuration;
-
-  &.hidden {
-    visibility: hidden;
-    opacity: 0;
-  }
-  
-  .popup-content {
-    max-width: 400px;
-    margin: $margin;
-    margin-top: 20%;
-    padding: 15px;
-    background-color: #fff;
-    transition: opacity $animDuration, margin $animDuration;
-  }
-
-  .popup-content.hidden {
-    margin-top:10%;
-    opacity: 0;
-  }
 }
