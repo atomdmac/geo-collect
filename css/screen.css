@@ -151,6 +151,11 @@ p {
 }
 
 /* line 52, ../sass/screen.scss */
+li {
+  line-height: 1.5;
+}
+
+/* line 56, ../sass/screen.scss */
 .sidebar {
   position: absolute;
   top: 0;
@@ -160,16 +165,16 @@ p {
   transition: left 500ms, right 500ms;
 }
 @media screen and (max-width: 600px) {
-  /* line 52, ../sass/screen.scss */
+  /* line 56, ../sass/screen.scss */
   .sidebar {
     width: 200px;
   }
 }
-/* line 64, ../sass/screen.scss */
+/* line 68, ../sass/screen.scss */
 .sidebar header {
   margin: 15px;
 }
-/* line 68, ../sass/screen.scss */
+/* line 72, ../sass/screen.scss */
 .sidebar nav {
   position: absolute;
   top: 15px;
@@ -181,11 +186,11 @@ p {
   -webkit-user-select: none;
   user-select: none;
 }
-/* line 80, ../sass/screen.scss */
+/* line 84, ../sass/screen.scss */
 .sidebar ul {
   padding: 20px 15px 15px 15px;
 }
-/* line 84, ../sass/screen.scss */
+/* line 88, ../sass/screen.scss */
 .sidebar li {
   padding: 15px;
   background: #ddd;
@@ -194,7 +199,7 @@ p {
   margin-bottom: 1px;
   overflow: hidden;
 }
-/* line 92, ../sass/screen.scss */
+/* line 96, ../sass/screen.scss */
 .sidebar li button {
   float: right;
   display: inline-block;
@@ -202,70 +207,70 @@ p {
   height: 46px;
 }
 
-/* line 101, ../sass/screen.scss */
+/* line 105, ../sass/screen.scss */
 .sidebar-left {
   left: 0;
   border-right: 1px solid #000;
 }
-/* line 105, ../sass/screen.scss */
+/* line 109, ../sass/screen.scss */
 .sidebar-left.off {
   left: -400px;
 }
 @media screen and (max-width: 600px) {
-  /* line 105, ../sass/screen.scss */
+  /* line 109, ../sass/screen.scss */
   .sidebar-left.off {
     left: -200px;
   }
 }
-/* line 113, ../sass/screen.scss */
+/* line 117, ../sass/screen.scss */
 .sidebar-left nav {
   left: 100%;
   border-left: 0;
 }
 
-/* line 119, ../sass/screen.scss */
+/* line 123, ../sass/screen.scss */
 .sidebar-right {
   right: 0;
   border-left: 1px solid #000;
 }
-/* line 123, ../sass/screen.scss */
+/* line 127, ../sass/screen.scss */
 .sidebar-right.off {
   right: -400px;
 }
 @media screen and (max-width: 600px) {
-  /* line 123, ../sass/screen.scss */
+  /* line 127, ../sass/screen.scss */
   .sidebar-right.off {
     right: -200px;
   }
 }
-/* line 131, ../sass/screen.scss */
+/* line 135, ../sass/screen.scss */
 .sidebar-right nav {
   right: 100%;
   border-right: 0;
 }
 
-/* line 137, ../sass/screen.scss */
+/* line 141, ../sass/screen.scss */
 #ground-view {
   z-index: 2;
 }
 
-/* line 141, ../sass/screen.scss */
+/* line 145, ../sass/screen.scss */
 #inventory-view {
   z-index: 2;
 }
 
-/* line 145, ../sass/screen.scss */
+/* line 149, ../sass/screen.scss */
 #map-view {
   width: 100%;
   height: 100%;
   transition: opacity 0.5s;
 }
-/* line 150, ../sass/screen.scss */
+/* line 154, ../sass/screen.scss */
 #map-view.hidden {
   opacity: 0;
 }
 
-/* line 155, ../sass/screen.scss */
+/* line 159, ../sass/screen.scss */
 #debug-view {
   position: absolute;
   width: 100%;
@@ -274,21 +279,50 @@ p {
   background: #fff;
   z-index: 1;
   min-width: 200px;
+  max-height: 200px;
+  transition: max-height 0.5s, padding-top 0.5s, padding-bottom 0.5s;
+  overflow: hidden;
+}
+/* line 171, ../sass/screen.scss */
+#debug-view.hidden {
+  padding-top: 0;
+  padding-bottom: 0;
+  max-height: 0;
+}
+/* line 177, ../sass/screen.scss */
+#debug-view li {
+  border-bottom: 1px solid #000;
+}
+/* line 181, ../sass/screen.scss */
+#debug-view li:last-child {
+  border: 0;
+}
+/* line 185, ../sass/screen.scss */
+#debug-view li span {
+  padding: 2px 4px;
+}
+/* line 189, ../sass/screen.scss */
+#debug-view .debug-label {
+  display: inline-block;
+  min-width: 50px;
+  font-weight: bold;
+  text-align: right;
+  border-right: 1px solid #000;
 }
 
-/* line 165, ../sass/screen.scss */
+/* line 198, ../sass/screen.scss */
 .mapboxgl-marker {
   min-width: 16px;
   min-height: 16px;
   background: url(../img/treasure-chest.png);
 }
 
-/* line 171, ../sass/screen.scss */
+/* line 204, ../sass/screen.scss */
 #player-marker {
   background: blue;
 }
 
-/* line 175, ../sass/screen.scss */
+/* line 208, ../sass/screen.scss */
 .popup {
   position: absolute;
   display: flex;
@@ -304,12 +338,12 @@ p {
   z-index: 9999;
   transition: opacity 0.5s, visibility 0.5s;
 }
-/* line 190, ../sass/screen.scss */
+/* line 223, ../sass/screen.scss */
 .popup.hidden {
   visibility: hidden;
   opacity: 0;
 }
-/* line 195, ../sass/screen.scss */
+/* line 228, ../sass/screen.scss */
 .popup .popup-content {
   max-width: 400px;
   margin: 15px;
@@ -318,7 +352,7 @@ p {
   background-color: #fff;
   transition: opacity 0.5s, margin 0.5s;
 }
-/* line 204, ../sass/screen.scss */
+/* line 237, ../sass/screen.scss */
 .popup .popup-content.hidden {
   margin-top: 10%;
   opacity: 0;
