@@ -4,11 +4,11 @@
   right: 0;
   bottom: 0;
   padding: $padding;
-  background: #fff;
+  background: $white;
   z-index: 1;
   min-width: 200px;
   max-height: 200px;
-  transition: max-height $animDuration, padding-top $animDuration, padding-bottom $animDuration;
+  transition: max-height $anim-duration, padding-top $anim-duration, padding-bottom $anim-duration;
   overflow: hidden;
 
   &.hidden {
@@ -17,16 +17,16 @@
     max-height: 0;
   }
 
-  li{
-    border-bottom: 1px solid #000;
-  }
-
-  li:last-child {
-    border: 0;
-  }
-
-  li span {
-    padding: 2px 4px;
+  li {
+    border-bottom: 1px solid $black;
+    
+    &:last-child {
+      border: 0;
+    }
+    
+    span {
+      padding: 2px 4px;
+    }
   }
 
   .debug-label {
@@ -34,6 +34,6 @@
     min-width: 50px;
     font-weight: bold;
     text-align: right;
-    border-right: 1px solid #000;
+    border-right: 1px solid $black;
   }
 }

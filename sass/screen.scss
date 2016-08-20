@@ -1,9 +1,3 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
- * Import this file using the following HTML or equivalent:
- * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-
-
 // ---
 // General Settings
 // ---
@@ -13,30 +7,28 @@ $padding: 15px;
 // ---
 // Sidebars
 // ---
-$sidebarWidthSmall: 200px;
-$sidebarWidthLarge: 400px;
+$sidebar-width-small: 200px;
+$sidebar-width-large: 400px;
 
 // ---
 // Animation
 // ---
-$animDuration: 0.5s;
-
-@import "compass/reset";
-@import "_screen.mobile";
-@import "_spinner";
+$anim-duration: .5s;
 
 // ---
-// Views
+// Colors
 // ---
-@import "_view.debug";
-@import "_view.map";
-@import "_view.sidebar";
-@import "_view.popup";
+$white: #fff;
+$black: #000;
+
+@import 'compass/reset';
+
 
 // ---
 // General Styles
 // ---
-html, body {
+html, 
+body {
   margin: 0;
   padding: 0;
 }
@@ -64,6 +56,9 @@ li {
   line-height: 1.5;
 }
 
+// ---
+// App Layout
+// ---
 #ground-view {
   z-index: 2;
 }
@@ -73,5 +68,23 @@ li {
 }
 
 #player-marker {
-  background: url(../img/player.png) !important;
+  background: url('../img/player.png') !important;
 }
+
+// ---
+// Views
+// ---
+@import '_view.debug';
+@import '_view.map';
+@import '_view.sidebar';
+@import '_view.popup';
+
+// ---
+// Components
+// ---
+@import '_spinner';
+
+// ---
+// Mobile
+// ---
+@import '_screen.mobile';

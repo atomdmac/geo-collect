@@ -11,7 +11,7 @@
   left: 0;
   background-color: rgba(0,0,0,0.75);
   z-index: 9999;
-  transition: opacity $animDuration, visibility $animDuration;
+  transition: opacity $anim-duration, visibility $anim-duration;
 
   &.hidden {
     visibility: hidden;
@@ -22,13 +22,13 @@
     max-width: 400px;
     margin: $margin;
     margin-top: 20%;
-    padding: 15px;
-    background-color: #fff;
-    transition: opacity $animDuration, margin $animDuration;
-  }
-
-  .popup-content.hidden {
-    margin-top:10%;
-    opacity: 0;
+    padding: $padding;
+    background-color: $white;
+    transition: opacity $anim-duration, margin $anim-duration;
+    
+    &.hidden {
+      margin-top: 10%;
+      opacity: 0;
+    }
   }
 }
