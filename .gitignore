@@ -1,4 +1,5 @@
-/token.js
+/client/token.js
 .sass-cache
 node_modules
-/js/bundle.js
+/client/js/bundle.js
+persist
