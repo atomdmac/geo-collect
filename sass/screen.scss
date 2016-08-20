@@ -49,6 +49,10 @@ p {
   margin: $margin 0;
 }
 
+li {
+  line-height: 1.5;
+}
+
 .sidebar {
   position: absolute;
   top: 0;
@@ -160,6 +164,35 @@ p {
   background: #fff;
   z-index: 1;
   min-width: 200px;
+  max-height: 200px;
+  transition: max-height $animDuration, padding-top $animDuration, padding-bottom $animDuration;
+  overflow: hidden;
+
+  &.hidden {
+    padding-top: 0;
+    padding-bottom: 0;
+    max-height: 0;
+  }
+
+  li{
+    border-bottom: 1px solid #000;
+  }
+
+  li:last-child {
+    border: 0;
+  }
+
+  li span {
+    padding: 2px 4px;
+  }
+
+  .debug-label {
+    display: inline-block;
+    min-width: 50px;
+    font-weight: bold;
+    text-align: right;
+    border-right: 1px solid #000;
+  }
 }
 
 .mapboxgl-marker {
