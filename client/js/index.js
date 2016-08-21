@@ -6,87 +6,32 @@ Backbone.$ = $;
 var mapboxgl = require('mapbox-gl');
 var Models   = require('./models');
 var Views    = require('./views');
-var Server   = require('./server-dummy');
+var ngeohash = require('ngeohash');
 
-var user, coords, map;
+var user,
+    marker,
+    coords, 
+    map, 
+    currentGeohashes = {}, 
+    geohashes, 
+    mapBounds,
+    geoOptions = {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 2000
+    },
+    geohashPrecision = 7,
+    socket = io();
 
-var socket = io();
-socket.on('login confirmed', onLoginSuccess);
-socket.emit('login', 'IMATESTUSER');
-
-function onLoginSuccess(msg) {
-    user = msg;
-    localStorage.username = user.name;
-    navigator.geolocation.getCurrentPosition(buildMap);
-}
-
-function buildMap(position) {
-    coords = [position.coords.longitude, position.coords.latitude];
-    mapboxgl.accessToken = token.MAPBOX_TOKEN;
-    mapOptions = {
-        container: 'map-view',
-        style: 'mapbox://styles/zatch/ciro86ffa001ag8nfwckgk2r3',
-        center: coords,
-        minZoom: 17,
-        maxZoom: 19,
-        scrollZoom: false,
-        boxZoom: false,
-//        dragPan: false,
-        keyboard: false,
-        doubleClickZoom: false
-    };
-    map = new mapboxgl.Map(mapOptions);
-    map.on('load', function () {
-        $('#loading-view').addClass('hidden');
-        $('#map-view').removeClass('hidden');
-        setTimeout(function () {
-          $('#debug-view').removeClass('hidden');
-        }, 500);
-        /*
-        socket.on('geohash update', onGeohashUpdate);
-        socket.emit('map loaded');
-        
-        document.getElementById('player').appendChild(createPlayerMarker());
-        
-        $('#map-center').click(function() {
-            map.flyTo({center: coords});
-        });
-        */
-       // mapWatch = navigator.geolocation.watchPosition(updatePosition, onGeoError, geoOptions);
-       // updatePosition(position);
-       okitstime();
-    });
-}
-
-
-
-function okitstime() {
-  // ---
 // Item System
 var groundCollectionInstance = new Models.ItemCollection();
 var groundViewInstance = new Views.GroundView(groundCollectionInstance);
 
-// Called when client first recieves list of items in the area.
-Server.on('server update zone items', function (data) {
-  data.forEach(function (itemModel, index) {
-    var itemMarker = new Views.ItemMarkerView(map, itemModel)
-  });
-});
-
-Server.on('server update nearby items', function (data) {
-  groundCollectionInstance.reset();
-  data.forEach(function (itemModel, index) {
-    groundCollectionInstance.add(itemModel);
-  });
-});
-
 var inventoryModelInstance = new Models.ItemCollection(); 
 var inventoryViewInstance = new Views.InventoryView(inventoryModelInstance);
 
-// Add debug items
-inventoryViewInstance.collection.add({label: 'Another Thing!'});
-
 // Debug System
+var updateCount = 0;
 var DebugModel = Backbone.Model.extend({
   defaults: {
     'latitude': 0,
@@ -117,21 +62,76 @@ var DebugView = Backbone.View.extend({
 
 var debugViewInstance = new DebugView;
 
-// Create a marker to represent the user.
-var marker = new mapboxgl.Marker($('<div id="player-marker"></div>')[0])
-  .setLngLat([0, 0])
-  .addTo(map);
+// Init connection.
+socket.on('login confirmed', onLoginSuccess);
+// TODO: Add a login creen.
+socket.emit('login', 'IMATESTUSER');
 
-// Center on user.
-var navOptions = {
-  enableHighAccuracy: true,
-  timeout: 10000,
-  maximumAge: 2000
-};
-var watchId = navigator.geolocation.watchPosition(positionUpdate, positionError, navOptions);
+function onLoginSuccess(msg) {
+  user = msg;
+  localStorage.username = user.name;
+  navigator.geolocation.getCurrentPosition(buildMap);
+}
 
-// !!! DEBUG !!!
-var updateCount = 0;
+function buildMap(position) {
+  coords = [position.coords.longitude, position.coords.latitude];
+  mapboxgl.accessToken = token.MAPBOX_TOKEN;
+  mapOptions = {
+    container: 'map-view',
+    style: 'mapbox://styles/zatch/ciro86ffa001ag8nfwckgk2r3',
+    center: coords,
+    minZoom: 17,
+    maxZoom: 19,
+    scrollZoom: false,
+    boxZoom: false,
+//    dragPan: false,
+    keyboard: false,
+    doubleClickZoom: false
+  };
+  map = new mapboxgl.Map(mapOptions);
+  map.on('load', function () {
+    $('#loading-view').addClass('hidden');
+    $('#map-view').removeClass('hidden');
+    setTimeout(function () {
+      $('#debug-view').removeClass('hidden');
+    }, 500);
+    
+    socket.on('geohash update', onGeohashUpdate);
+    socket.emit('map loaded');
+
+    // Create a marker to represent the user.
+    marker = new mapboxgl.Marker($('<div id="player-marker"></div>')[0])
+      .setLngLat([0, 0])
+      .addTo(map);
+
+    mapWatch = navigator.geolocation.watchPosition(positionUpdate, positionError, geoOptions);
+    positionUpdate(position);
+  });
+}
+
+function onGeohashUpdate(msg) {
+  var newItems,
+      lcv = 0,
+      iCoords;
+  if (!!msg['sample-item'].length) {
+    newItems = msg['sample-item'];
+  }
+  else {
+    newItems = [msg];
+  }
+
+  newItems.forEach(function (itemData, index) {
+    console.log('makin it!');
+    
+
+    new Views.ItemMarkerView(map, new Models.ItemModel({
+      label: itemData.uuid,
+      latitude: itemData.coords.latitude,
+      longitude: itemData.coords.longitude
+    }));
+
+  });
+}
 
 function positionUpdate (position) {
 
@@ -141,27 +141,43 @@ function positionUpdate (position) {
   // !!! DEBUG !!!
   if(!updateCount /*&& position.coords.accuracy < 20*/) {
     updateCount++;
-
-    Server.emit('client init', {
-      centerLng: position.coords.longitude,
-      centerLat: position.coords.latitude,
-      spread   : 0.0001
-    });
   }
 
+  coords = [position.coords.longitude, position.coords.latitude];
 
+  mapBounds = map.getBounds(); // Get the bounds of the visible map
+  geohashes = ngeohash.bboxes(mapBounds._sw.lat, mapBounds._sw.lng, mapBounds._ne.lat, mapBounds._ne.lng, geohashPrecision); // Get all geohashes within the bounds
+  
+  // Leave geohashes we aren't in anymore.
+  for (var geohash in currentGeohashes) {
+    if(!geohashes.includes(geohash)) {
+      leaveGeohash(geohash);
+    }
+  }
+  
+  // Subscribe to any new hashes we've moved into.
+  geohashes.forEach(function(geohash) {
+    if(!currentGeohashes[geohash]) {
+      joinGeohash(geohash);
+    }
+  });
 
-  marker.setLngLat([position.coords.longitude, position.coords.latitude])
+  // TODO: Calculate nearby items.
+  /*
+  var nearbyItems = Server.items.filter(function (item, index) {
+    var lngDiff = item.get('longitude') - data.longitude,
+        latDiff = item.get('latitude')  - data.latitude,
+        diff    = Math.abs(Math.sqrt(lngDiff * lngDiff + latDiff * latDiff));
+    if(diff < 0.00005) return true;
+  });
+  */
+
+  marker.setLngLat([position.coords.longitude, position.coords.latitude]);
   map.jumpTo({
     center: [position.coords.longitude, position.coords.latitude], 
     zoom: 19
   });
 
-  // Alert the server of my updated position.
-  Server.emit('client update', {
-    latitude : position.coords.latitude, 
-    longitude: position.coords.longitude
-  });
 }
 
 function positionError (error) {
@@ -175,21 +191,30 @@ function updateDebug (position) {
   debugModelInstance.set('freshness', true);
 }
 
-var items = [];
-function scatterItems (centerLng, centerLat, spread) {
-  var totalItems = 10,
-    itemModel, itemView, latitude, longitude;
-  for(var i=0; i<totalItems; i++) {
-    latitude = centerLat + (Math.random() * spread) * (Math.random() < 0.5 ? 1 : -1);
-    longitude = centerLng + (Math.random() * spread) * (Math.random() < 0.5 ? 1 : -1);
-    itemModel = new Models.ItemModel({
-      label: 'Item ' + i,
-      latitude: latitude,
-      longitude: longitude
-    });
-    itemView = new ItemMarker(map, itemModel);
-    items.push(itemModel);
-  }
+function leaveGeohash(sGeohash) {
+  console.log('no longer in:',sGeohash);
+
+  // Request to unsubscribe from geohash updates from server.
+  socket.emit('leave geohash', sGeohash);
+
+  // TODO: Remove geohash item markers from map.
+
+  // Delete geohash from local store.
+  delete currentGeohashes[sGeohash];
 }
 
+function joinGeohash(sGeohash) {
+  // Don't attempt to join geohahses we've already joined.
+  if (!!currentGeohashes[sGeohash]) {
+    throw 'Already joined geohash ' + sGeohash + '. Join aborted.';
+    return;
+  }
+
+  console.log('now in:',sGeohash);
+
+  // Set up placeholder object to be populated by server response.
+  currentGeohashes[sGeohash] = {};
+
+  // Request to subscribe to geohash updates from server.
+  socket.emit('join geohash', sGeohash);
 }
