@@ -8,20 +8,60 @@ var Models   = require('./models');
 var Views    = require('./views');
 var Server   = require('./server-dummy');
 
-mapboxgl.accessToken = token.MAPBOX_TOKEN;
-var map = new mapboxgl.Map({
-  container: 'map-view',
-  style: 'mapbox://styles/mapbox/streets-v9'
-});
+var user, coords, map;
 
-// Disable map panning/zooming.
-map.dragPan.disable();
-map.touchZoomRotate.disable();
-map.doubleClickZoom.disable();
-map.scrollZoom.disable();
-map.keyboard.disable();
+var socket = io();
+socket.on('login confirmed', onLoginSuccess);
+socket.emit('login', 'IMATESTUSER');
 
-// ---
+function onLoginSuccess(msg) {
+    user = msg;
+    localStorage.username = user.name;
+    navigator.geolocation.getCurrentPosition(buildMap);
+}
+
+function buildMap(position) {
+    coords = [position.coords.longitude, position.coords.latitude];
+    mapboxgl.accessToken = token.MAPBOX_TOKEN;
+    mapOptions = {
+        container: 'map-view',
+        style: 'mapbox://styles/zatch/ciro86ffa001ag8nfwckgk2r3',
+        center: coords,
+        minZoom: 17,
+        maxZoom: 19,
+        scrollZoom: false,
+        boxZoom: false,
+//        dragPan: false,
+        keyboard: false,
+        doubleClickZoom: false
+    };
+    map = new mapboxgl.Map(mapOptions);
+    map.on('load', function () {
+        $('#loading-view').addClass('hidden');
+        $('#map-view').removeClass('hidden');
+        setTimeout(function () {
+          $('#debug-view').removeClass('hidden');
+        }, 500);
+        /*
+        socket.on('geohash update', onGeohashUpdate);
+        socket.emit('map loaded');
+        
+        document.getElementById('player').appendChild(createPlayerMarker());
+        
+        $('#map-center').click(function() {
+            map.flyTo({center: coords});
+        });
+        */
+       // mapWatch = navigator.geolocation.watchPosition(updatePosition, onGeoError, geoOptions);
+       // updatePosition(position);
+       okitstime();
+    });
+}
+
+
+
+function okitstime() {
+  // ---
 // Item System
 var groundCollectionInstance = new Models.ItemCollection();
 var groundViewInstance = new Views.GroundView(groundCollectionInstance);
@@ -109,11 +149,7 @@ function positionUpdate (position) {
     });
   }
 
-  $('#loading-view').addClass('hidden');
-  $('#map-view').removeClass('hidden');
-  setTimeout(function () {
-    $('#debug-view').removeClass('hidden');
-  }, 500);
+
 
   marker.setLngLat([position.coords.longitude, position.coords.latitude])
   map.jumpTo({
@@ -154,4 +190,6 @@ function scatterItems (centerLng, centerLat, spread) {
     itemView = new ItemMarker(map, itemModel);
     items.push(itemModel);
   }
+}
+
 }
